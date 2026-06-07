@@ -1,497 +1,67 @@
-# MSP430 `.z1` / `.sky` / `ARM M4F(CC1352R)` / `cooja-native` Platformları için Üretilmiş Firmware’ler Üzerinde Yapılabilecek Analiz Türleri Kontrol Listesi
-
----
-##### (* ARM Mimarisinde derlenmiş firmware analizi yapmak isteyen gruplar MSP430 Toolchain yanında ARM-Toolchain araçlarını da indirip, kullanmalıdırlar.)
-
-``` bash
-  $ wget https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/9-2020q2/gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2
-  $ tar -xjf gcc-arm-none-eabi-9-2020-q2-update-x86_64-linux.tar.bz2
-```
----
-##### ** Analiz etmeniz için farklı platformlarda oluşturulmuş örnek firmware arşivi bil.omu drive linki için [tıklayınız](https://drive.google.com/file/d/1oLrZWPmDyuznWe5qS7zOsfSyyyPcQbBG/view?usp=sharing) .
-
-
----
-
-# 1. Binary Kimlik Analizi
-
-* Hedef platform analizi (`.z1` / `.sky` / `ARM M4F(CC1352R)` / `cooja-native`)
-* MSP430 mimari tipi
-* ELF format bilgisi
-* Endianness nedir ve Endianness bilgisi
-* Entry point adresi
-* ABI nedir ve ABI bilgisi
-* Compiler izi
-* Toolchain versiyonu
-* Optimization level tahmini
-* Debug symbol var/yok analizi
-
-Araçlar:
-
-* `msp430-readelf`
-* `msp430-objdump`
-* `msp430-strings`
-* `Ve üstteki araçların ARM versiyonları...`
----
-
-# 2. Bellek Kullanım Analizi
-
-* Flash, RAM, Stack, Heap anlamları
-* Flash kullanım miktarı
-* RAM kullanım miktarı
-* `.text` boyutu
-* `.data` boyutu
-* `.bss` boyutu
-* Stack kullanım tahmini
-* Heap var/yok analizi
-* Section dağılımı
-* Memory map analizi
-* Büyük veri yapılarının tespiti
-
-Araçlar:
-
-* `msp430-size`
-* `msp430-readelf`
-* `msp430-nm`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 3. Symbol / Function Analizi
-
-* Fonksiyon isimleri
-* Global değişkenler
-* Static değişkenler
-* ISR (interrupt) fonksiyonları
-* Contiki process entry’leri
-* Radio driver fonksiyonları
-* Timer callback’leri
-* Networking callback’leri
-* Sensor handler’ları
-* Kullanılan kütüphaneler
-* Kullanılmayan (dead) fonksiyonlar
-* Function address mapping
-
-Araçlar:
-
-* `msp430-nm`
-* `msp430-readelf`
-* `msp430-objdump`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 4. String ve Metadata Analizi
-
-* Debug mesajları
-* printf logları
-* IPv6 adresleri
-* MAC adresleri
-* Network node ID’leri
-* Sensor isimleri
-* Process isimleri
-* Routing protokol isimleri
-* TSCH/6LoWPAN/RPL stringleri
-* Hidden diagnostic message’lar
-* Hardcoded config değerleri
-* Developer notları
-
-Araçlar:
-
-* `msp430-strings`
-* `Ve üstteki aracın ARM versiyonu...`
-
----
-
-# 5. Assembly / Instruction Analizi
-
-* Instruction sequence analizi
-* Function prologue/epilogue
-* Register kullanımı
-* Stack frame yapısı
-* ISR akışı
-* Loop yapıları
-* Branch analizi
-* Jump table analizi
-* Function call graph
-* Inline function tespiti
-* Compiler optimization davranışı
-* Delay loop analizi
-* Busy-wait yapıları
-* Context switching
-* Protothread expansion
-* Scheduler davranışı
-
-Araçlar:
-
-* `msp430-objdump`
-* `msp430-as`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 6. Source-Level Mapping Analizi
-
-(Debug build varsa)
-
-* Address → source line eşleme
-* Function → source file eşleme
-* ISR → source mapping
-* Crash address çözümleme
-* Optimization sonrası source mapping
-* Inline edilmiş kodların tespiti
-
-Araçlar:
-
-* `msp430-addr2line`
-* `msp430-objdump -S`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 7. ELF Yapısı Analizi
-
-* ELF header
-* Section header
-* Program header
-* Symbol table
-* Relocation entries
-* Debug sections
-* DWARF info
-* Linker-generated metadata
-* Startup section
-* Vector table
-* Initialization routines
-
-Araçlar:
-
-* `msp430-readelf`
-* `msp430-elfedit`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 8. Interrupt ve Donanım Analizi
-
-* Interrupt vector table
-* GPIO access pattern
-* Timer interrupt kullanımı
-* UART ISR
-* Radio interrupt handler
-* ADC access
-* Sensor polling
-* Low-power mode geçişleri
-* Clock configuration
-* MSP430 register erişimleri
-
-Araçlar:
-
-* `msp430-objdump`
-* `msp430-readelf`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 9. Networking Analizi
-
-* Unicast kullanım tespiti
-* Broadcast kullanım tespiti
-* Multicast tespiti
-* IPv6 stack kullanımı
-* RPL routing analizi
-* TSCH scheduler çağrıları
-* MAC layer interaction
-* Packet buffer kullanımı
-* Neighbor table erişimi
-* Radio transmission akışı
-* Retransmission logic
-* ACK mekanizmaları
-* CSMA/TSCH farkları
-* Contiki network API kullanımı
-
-Araçlar:
-
-* `msp430-nm`
-* `msp430-objdump`
-* `msp430-strings`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 10. Wireless / TSCH Analizi
-
-* TSCH slot operation
-* Channel hopping logic
-* ASN handling
-* Radio timing loops
-* Synchronization routines
-* Schedule management
-* Packet timing
-* MAC timing critical path
-* Drift compensation
-* Low-power radio behavior
-
-Araçlar:
-
-* `msp430-objdump`
-* `msp430-nm`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 11. Sensor ve Peripheral Analizi
-
-* Button handler
-* LED driver
-* UART usage
-* SPI access
-* I2C access
-* ADC routines
-* Sensor polling interval
-* Interrupt-driven sensor logic
-* GPIO toggle behavior
-* Peripheral initialization sequence
-
-Araçlar:
-
-* `msp430-objdump`
-* `msp430-nm`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 12. Algoritma Koşma / DSP / Matematiksel Analiz
-
-* Floating-point kullanımı
-* Fixed-point kullanımı
-* Trigonometric computation
-* Multiply/divide routines
-* Software floating-point emulation
-* DSP benzeri loop’lar
-* Matrix operation izleri
-* Signal processing pattern’leri
-* Computational hotspot’lar
-* Numerical optimization
-
-Araçlar:
-
-* `msp430-objdump`
-* `msp430-gprof`
-* `msp430-nm`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 13. Güç ve Performans Analizi
-
-* Low-power mode geçişleri
-* CPU-intensive function’lar
-* Busy-wait detection
-* Sleep/wakeup flow
-* Timer usage intensity
-* Radio duty cycle tahmini
-* ISR yoğunluğu
-* Function execution cost
-* Flash/RAM efficiency
-* Energy-heavy computation bölgeleri
-
-Araçlar:
-
-* `msp430-gprof`
-* `msp430-objdump`
-* `msp430-size`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 14. Coverage ve Profiling Analizi
-
-* Function call frequency
-* Execution hotspot
-* Unused branch’ler
-* Rarely executed path’ler
-* Test coverage
-* Critical execution path
-* Runtime bottleneck’ler
-
-Araçlar:
-
-* `msp430-gcov`
-* `msp430-gprof`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 15. Reverse Engineering Analizi
-
-* Firmware behavior recovery
-* Unknown firmware classification
-* Feature inference
-* Protocol inference
-* ISR purpose discovery
-* Hardware interaction recovery
-* State machine extraction
-* Scheduler reconstruction
-* Event-flow reconstruction
-* Network role inference
-
-Araçlar:
-
-* `msp430-objdump`
-* `msp430-nm`
-* `msp430-readelf`
-* `msp430-strings`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 16. Compiler ve Optimization Analizi
-
-* `-O0/-O2/-Os` farkları
-* Inlining behavior
-* Dead code elimination
-* Constant folding
-* Loop optimization
-* Register allocation
-* Tail-call optimization
-* Branch optimization
-* Macro expansion
-* Preprocessor etkileri
-
-Araçlar:
-
-* `msp430-gcc`
-* `msp430-cpp`
-* `msp430-objdump`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 17. Linker ve Build Sistemi Analizi
-
-* Section placement
-* Link order
-* Static library linkage
-* Startup code
-* Linker script behavior
-* Vector placement
-* Symbol resolution
-* Relocation behavior
-
-Araçlar:
-
-* `msp430-ld`
-* `msp430-ar`
-* `msp430-ranlib`
-* `msp430-readelf`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 18. Binary Transformation Analizi
-
-* ELF → HEX conversion
-* ELF → binary conversion
-* Section extraction
-* Symbol stripping
-* Debug removal
-* Firmware minimization
-* Binary patch preparation
-
-Araçlar:
-
-* `msp430-objcopy`
-* `msp430-strip`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 19. Library ve Archive Analizi
-
-* Static library içeriği
-* Object file extraction
-* Archive symbol table
-* Linked module analizi
-
-Araçlar:
-
-* `msp430-ar`
-* `msp430-gcc-ar`
-* `msp430-ranlib`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 20. Contiki-NG Özel Analizler
-
-* PROCESS_THREAD recovery
-* Protothread expansion
-* Event-driven scheduler analizi
-* etimer/ctimer usage
-* PROCESS_BEGIN/END expansion
-* PROCESS_YIELD flow
-* NETSTACK interaction
-* Packetbuf lifecycle
-* uIP callback chain
-* Rime stack usage
-
-Araçlar:
-
-* `msp430-cpp`
-* `msp430-objdump`
-* `msp430-nm`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 21. Güvenlik ve Robustness Analizi
-
-* Hardcoded credential arama
-* Debug backdoor izleri
-* Buffer handling
-* Unsafe memory access
-* Stack-heavy routines
-* Potential overflow bölgeleri
-* Assert/debug remnants
-* Information leakage string’leri
-
-Araçlar:
-
-* `msp430-strings`
-* `msp430-objdump`
-* `msp430-readelf`
-* `Ve üstteki araçların ARM versiyonları...`
-
----
-
-# 22. Karşılaştırmalı Firmware Analizi
-
-İki firmware arasında:
-
-* Code size farkı
-* RAM farkı
-* Function count farkı
-* ISR yoğunluğu
-* Networking complexity
-* Radio stack farkı
-* Symbol farkı
-* Optimization farkı
-* Assembly complexity farkı
-
-
-
----
-
-# 23. Eğitimsel Reverse Engineering Görevleri
-
-* Bir firmware’in ne yaptığını bulma
-* hangi protokolü kullandığını çıkarma
-* button/LED mapping bulma
-* ISR’leri tanıma
-* network role çıkarımı
-* Kullandığı algoritmik blok tespiti
-* energy-heavy bölgeleri bulma
-* stripped firmware çözümleme
-
-
----
+# BİL 304 - ELF Analizi ve Araştırma Raporu
+
+## 1. Dosyanın ELF Sınıfı, Mimarisi ve Giriş Adresi
+Dosyanın başlık (header) bilgilerini okumak için terminalde `msp430-readelf -h udp-client.z1` komutunu çalıştırdım. Çıkan tabloyu incelediğimde temel yapısal özellikler şu şekilde:
+
+* **ELF Sınıfı (Class):** Çıktıda `ELF32` değerini görüyoruz. Z1 donanımındaki MSP430 mikrodenetleyicisi aslında 16-bit bir mimariye sahip ancak araç zinciri (toolchain) derleme yaparken standart bir bellek haritalaması sunmak için dosyayı 32-bit ELF formatında oluşturmuş.
+* **Mimari (Machine):** Cihaz hedefi `Texas Instruments msp430 microcontroller` olarak belirtilmiş. Bu da derlenen imajın doğrudan MSP430'un komut setiyle (instruction set) uyumlu olduğunu ve başka bir mimaride koşamayacağını doğruluyor.
+* **Giriş Adresi (Entry Point):** Çıktıda giriş adresi `0x3100` olarak verilmiş. Bu adres oldukça kritik; çünkü cihaza enerji verildiğinde veya boot/reset işlemi yapıldığında işlemci doğrudan Flash bellekteki bu adrese atlayıp kodu oradan çalıştırmaya başlayacak.
+
+
+
+## 2. Temel Bölümlerin (.text, .data, .bss, .rodata, .vectors) Varlığı ve Anlamı
+Dosyadaki bölümleri incelemek için `msp430-readelf -S udp-client.z1` komutunu çalıştırdım. Çıkan section tablosu, yazdığımız kodun ve değişkenlerin donanım belleğine nasıl dağıtılacağını çok net gösteriyor:
+
+* **.text Bölümü:** Tabloda `0x3100` adresinden başladığını ve `AX` (Alloc, Execute) bayraklarına sahip olduğunu görüyoruz. Burası aslında bizim yazdığımız programın derlenmiş makine dili komutlarını barındırıyor. Doğrudan Flash (ROM) belleğe yazılıyor ve işlemci kodları buradan okuyup çalıştırıyor.
+* **.rodata Bölümü:** Tablodaki `A` (Alloc) bayrağından anlıyoruz ki burası sadece okunabilir (Read-Only) verilerin tutulduğu kısım. Kod içindeki sabitler (const) veya ekrana bastığımız string mesajlar burada duruyor. Değiştirilmeyeceği için RAM'de boşuna yer kaplamaması adına Flash bellekte muhafaza ediliyor.
+* **.data Bölümü:** `WA` (Write, Alloc) bayraklarına sahip. Kod yazarken başlangıç değeri atadığımız global veya statik değişkenler (örneğin `int sayac = 5;`) bu bölümde tutuluyor. Çalışma zamanında (runtime) değerleri değişebileceği için RAM'e yükleniyorlar.
+* **.bss Bölümü:** Tabloda tipinin `NOBITS` olduğunu görmek çok mantıklı. Çünkü burası başlangıç değeri atanmamış global/statik değişkenler (örneğin `int toplam;`) için ayrılan yer. Firmware dosyasının içinde (disk/flash üzerinde) boşuna yer kaplamıyor; sadece bir nevi "yer tutucu" görevi görüyor. Cihaz boot edildiğinde işletim sistemi RAM'de bu değişkenler için yer ayırıp içlerini sıfırla dolduruyor.
+* **.vectors Bölümü:** `0xffc0` adresine yerleşen bu özel kısım, donanım kesme (interrupt) vektörlerini tutuyor. Örneğin bir timer dolduğunda veya ağdan paket geldiğinde, işlemcinin o anki işini bırakıp kodda hangi adrese sıçraması gerektiğini gösteren yönlendirme tablosu burada saklanıyor.
+
+
+
+
+## 3. Kod ve Veri Boyutları
+Programın cihaz hafızasında ne kadar yer kaplayacağını görmek için `msp430-size udp-client.z1` komutunu kullandım. Çıktıdaki sayılar bize RAM ve Flash (ROM) kullanımının net bir özetini veriyor:
+
+* **text (42542 bayt):** Derlenen kodların ve sabit değerlerin kapladığı alan. Bu kısım doğrudan cihazın Flash belleğine yazılıyor.
+* **data (336 bayt):** Başlangıç değeri atadığımız değişkenlerin boyutu. Bu veriler cihaz kapalıyken Flash'ta saklanıyor, cihaz boot edildiğinde ise RAM'e kopyalanıyor.
+* **bss (5888 bayt):** Başlangıç değeri olmayan değişkenler için çalışma zamanında (runtime) RAM'de ayrılan boş alan.
+* **dec (48766 bayt):** Programın bellekteki toplam ayak izi (text + data + bss).
+
+Bu sayılara bakarak cihaz üzerindeki asıl yükümüzü hesaplarsak; bu program Z1 cihazının **Flash belleğinde 42.878 bayt** (text + data, yani yaklaşık 41.8 KB), **RAM üzerinde ise 6.224 bayt** (data + bss, yaklaşık 6 KB) yer kaplayacak. Z1'in 92 KB Flash kapasitesi olduğunu düşünürsek, hafızanın yarısından azını kullanmışız; yani donanım sınırları açısından oldukça güvenli bir noktadayız diyebilirim.
+
+
+
+
+## 4. Sembol Tablosu ve Anlamlı Semboller
+Derlenmiş dosyanın içindeki fonksiyon ve değişkenlerin bellek adreslerini haritalamak için `msp430-nm -n udp-client.z1` komutunu çalıştırdım. Çıktı çok uzun bir liste olduğu için özellikle projemizin yapısını ele veren bazı kritik sembolleri inceledim:
+
+* **'T' ve 't' (Text) Sembolleri:** Çıktıda en çok yer kaplayan bu semboller, Flash bellekteki fonksiyonlarımızı gösteriyor. Listede `uip_udp_packet_send`, `uip_process` ve `uip_icmp6_input` gibi fonksiyonları açıkça görebiliyoruz. Bu da bize cihazın içinde tam teşekküllü bir IPv6/UDP ağ yığınının (network stack) gömülü olduğunu kanıtlıyor. Ayrıca `printf` ve `memcpy` gibi standart C kütüphanesi fonksiyonlarının da kodumuza dahil edildiğini görüyoruz.
+* **'R' ve 'r' (Read-Only) Sembolleri:** Bunlar değiştirilemez sabit verileri temsil ediyor. Listede `cc2420_driver`, `csma_driver` ve `button_sensor` gibi semboller var. Bunlar cihazın telsiz çipini (CC2420) ve fiziksel butonlarını yöneten sürücülerin sabit yapı (struct) tanımlamaları.
+* **Linker (Bağlayıcı) İşaretçileri:** Listenin sonlarına doğru yer alan `_etext`, `__data_load_start` ve `__vectors_start` gibi 'A' (Absolute) işaretli semboller benim yazmadığım, derleyicinin arka planda otomatik eklediği özel adresler. RAM'in nerede başladığını ve kesme vektörlerinin (interrupt vectors) nereye yerleştiğini işletim sistemine göstermek için kullanılıyorlar. 
+
+Özetle bu tablo, Contiki-NG işletim sisteminin devasa altyapısının bizim o küçük udp-client kodumuzla nasıl birleşip makine adreslerine döküldüğünü çok güzel özetliyor.
+
+
+
+
+
+## 5. Kesme Vektörleri veya Başlangıç Adresi ile İlişkili Bilgiler
+`msp430-objdump -d` komutuyla makine kodunun (assembly) içine daldığımda çok tanıdık bir adresle karşılaştım: `0x3100`. Birinci maddede `readelf` ile bulduğumuz "Entry Point" (giriş) adresi tam olarak burasıydı! 
+
+Çıktıyı incelediğimde, cihaz boot olduğunda doğrudan bizim C kodumuzdaki `main()` veya süreç (process) fonksiyonlarına gitmediğini görüyorum. İşlemci önce `0x3100` adresine zıplayıp donanımı hazırlamak için şu adımları işletiyor:
+* **__watchdog_support (0x3100):** Cihaz boot sırasında takılıp kendine reset atmasın diye ilk iş olarak donanımsal watchdog timer ayarlanıyor.
+* **__init_stack (0x310c):** Fonksiyonların çağrılabilmesi ve yerel değişkenlerin tutulabilmesi için Stack (yığın) bellek alanının başlangıç noktası (`0x3100` değeriyle) register'a yükleniyor.
+* **__do_copy_data (0x3110) & __do_clear_bss (0x3128):** Hatırlarsan 2. ve 3. maddelerde `.data` ve `.bss` bölümlerinden bahsetmiştik. İşte cihaz tam bu adımda `.data` içindeki değişkenleri ROM'dan RAM'e kopyalıyor ve `.bss` alanındaki değişkenlerin içini sıfırlarla (`0x00`) temizliyor. 
+
+Yani bu başlangıç adresi (reset vektörünün işaret ettiği ilk yer), işletim sisteminin çalışabilmesi için sahneyi hazırlayan o kritik "C Runtime (CRT)" kurulum kodlarını barındırıyor.
+
+
+
+
+
+## 6. Dosyanın Neden "Ham Binary" Değil de "ELF Executable" Olarak Değerlendirildiği
+Aslında bu sorunun cevabını yukarıdaki 5 maddeyi terminalde analiz ederken yaşayarak gördüm. Eğer elimizdeki dosya "ham binary" (raw binary) olsaydı, içinde sadece 0 ve 1'lerden oluşan kuru bir makine kodu yığını olurdu. `readelf`, `nm` veya `objdump` gibi araçları çalıştırdığımda o bölümleri veya fonksiyon isimlerini göremezdim.
+
+Ancak bu dosya bir **ELF (Executable and Linkable Format)**. Yani içinde sadece çalışacak kodlar değil; aynı zamanda işletim sistemine ve linker'a (bağlayıcıya) rehberlik eden zengin bir "üst veri" (metadata) barındırıyor. RAM'in neresine hangi verinin yazılacağı (Section Headers), bizim yazdığımız fonksiyonların isimleri ve adresleri (Symbol Table), hata ayıklama bilgileri (Debug Info) ve cihazın boot olacağı ilk adres (Entry Point) bu ELF yapısının içinde saklı. Kısacası ELF, donanıma sadece "ne yapacağını" değil, "hafızayı nasıl organize edeceğini" de anlatan bir harita içerdiği için ham binary'den ayrılıyor.
